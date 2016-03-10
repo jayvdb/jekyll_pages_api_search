@@ -9,8 +9,13 @@
   "main": "assets/js/search.js",
   "devDependencies": {
     "browserify": "10.x.x",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
     "eslint": "^2.3.0",
+    "http-server": "^0.9.0",
     "lunr": "^0.6.0",
+    "mocha": "^2.4.5",
+    "temp": "^0.8.3",
     "uglifyify": "3.x.x"
   },
   "repository": {
@@ -31,6 +36,7 @@
   "dependencies": {},
   "scripts": {
     "make-bundle": "browserify -g uglifyify assets/js/search.js -o assets/js/search-bundle.js",
-    "lint": "eslint assets/js/search.js assets/js/search-engine.js assets/js/search-ui.js lib/jekyll_pages_api_search/search.js lib/jekyll_pages_api_search/browserify.js"
+    "lint": "eslint assets/js/search.js assets/js/search-engine.js assets/js/search-ui.js lib/jekyll_pages_api_search/*.js test/*-test.js test/helpers/*.js",
+    "serve-tests": "browserify test/*-test.js -o test/helpers/test-bundle.js && node test/helpers/build-test-index.js && http-server -c-1 ."
   }
 }

@@ -42,3 +42,7 @@ node_modules
 # Build artifacts
 lib/jekyll_pages_api_search/lunr.min.js
 assets/js/search-bundle.js*
+
+# Test artifacts
+test/data/search-index.json
+test/helpers/test-bundle.js

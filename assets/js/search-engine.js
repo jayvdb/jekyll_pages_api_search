@@ -38,6 +38,10 @@ SearchEngine.prototype.fetchIndex = function(baseUrl) {
         reject(new Error('failed to parse ' + indexUrl));
       }
     });
+    req.addEventListener('error', function() {
+      reject(new Error('failed to make XMLHttpRequest; ' +
+        'see console for details'));
+    });
     req.open('GET', indexUrl);
     req.send();
   });

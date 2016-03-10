@@ -7,6 +7,10 @@ var chaiAsPromised = require('chai-as-promised');
 chai.should();
 chai.use(chaiAsPromised);
 
+if (global.Promise === undefined) {
+  require('es6-promise').polyfill();
+}
+
 describe('SearchEngine', function() {
   var searchEngine, testIndex;
 

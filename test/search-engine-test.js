@@ -12,7 +12,7 @@ if (global.Promise === undefined) {
 }
 
 describe('SearchEngine', function() {
-  var searchEngine, testIndex;
+  var searchEngine;
 
   beforeEach(function() {
     searchEngine = new SearchEngine();

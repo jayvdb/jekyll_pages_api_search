@@ -38,7 +38,7 @@
   "dependencies": {},
   "scripts": {
     "make-bundle": "browserify -g uglifyify assets/js/search.js -o assets/js/search-bundle.js",
-    "lint": "eslint assets/js/search.js assets/js/search-engine.js assets/js/search-ui.js lib/jekyll_pages_api_search/*.js test/*-test.js test/helpers/*.js",
+    "lint": "eslint assets/js/search.js assets/js/search-engine.js assets/js/search-ui.js lib/jekyll_pages_api_search/browserify.js lib/jekyll_pages_api_search/search.js test/*-test.js test/helpers/build-test-index.js test/helpers/test-index.js",
     "make-test-bundle": "browserify test/*-test.js -o test/helpers/test-bundle.js && node test/helpers/build-test-index.js",
     "serve-tests": "npm run make-test-bundle && http-server -c-1 ."
   }

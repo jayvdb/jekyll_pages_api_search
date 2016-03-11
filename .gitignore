@@ -45,4 +45,4 @@ assets/js/search-bundle.js*
 
 # Test artifacts
 test/data/search-index.json
-test/helpers/test-bundle.js
+test/index.js

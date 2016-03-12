@@ -9,7 +9,7 @@ chai.should();
 describe('SearchUi', function() {
   var searchUi, doc, searchForm,
       searchInput, searchResults, // eslint-disable-line no-unused-vars
-      makeElement, createdElements;
+      makeElement, createdElements, createKeyboardShortcutEvent;
 
   beforeEach(function() {
     doc = global.document;
@@ -70,5 +70,40 @@ describe('SearchUi', function() {
     searchUi.emptyResultsMessagePrefix.should.eql('Zero results for:');
     searchUi.emptyResultsElementType.should.eql('div');
     searchUi.emptyResultsElementClass.should.eql('empty-results');
+  });
+
+  createKeyboardShortcutEvent = function() {
+    var keyboardEvent;
+
+    if (global.window._phantom) {
+      // Hack alert! This should go away when PhantomJS properly supports
+      // Event constructors: https://github.com/ariya/phantomjs/issues/11289
+      keyboardEvent = doc.createEvent('KeyboardEvent');
+      keyboardEvent.initKeyboardEvent('keydown', true, true, global.window);
+      keyboardEvent.code = SearchUi.GLOBAL_SHORTCUT_KEY_CODE;
+      return keyboardEvent;
+    }
+    return new global.window.KeyboardEvent('keydown', {
+      code: SearchUi.GLOBAL_SHORTCUT_KEY_CODE
+    });
+  };
+
+  it('shouldn\'t respond to shortcut before registration', function() {
+    var shortcutEvent = createKeyboardShortcutEvent();
+    searchUi.inputElement.blur();
+    searchUi.inputElement.value = 'foobar';
+    doc.body.dispatchEvent(shortcutEvent);
+    doc.activeElement.should.not.eql(searchUi.inputElement);
+    doc.getSelection().toString().should.eql('');
+  });
+
+  it('should respond to global shortcut after registration', function() {
+    var shortcutEvent = createKeyboardShortcutEvent();
+    searchUi.enableGlobalShortcut();
+    searchUi.inputElement.blur();
+    searchUi.inputElement.value = 'foobar';
+    doc.body.dispatchEvent(shortcutEvent);
+    doc.activeElement.should.eql(searchUi.inputElement);
+    doc.getSelection().toString().should.eql('foobar');
   });
 });

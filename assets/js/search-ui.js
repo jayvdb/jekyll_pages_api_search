@@ -25,9 +25,10 @@ SearchUi.DEFAULT_SEARCH_RESULTS_ID = 'search-results';
 SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX = 'No results found for';
 SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE = 'p';
 SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS = 'search-empty';
+SearchUi.GLOBAL_SHORTCUT_KEY_CODE = 'Slash';
 
 function isForwardSlash(keyCode) {
-  return keyCode === 191;
+  return keyCode === SearchUi.GLOBAL_SHORTCUT_KEY_CODE;
 }
 
 function isInput(element) {
@@ -38,14 +39,14 @@ SearchUi.prototype.enableGlobalShortcut = function() {
   var doc = this.doc,
       inputElement = this.inputElement;
 
-  doc.body.onkeydown = function(event) {
-    if (isForwardSlash(event.keyCode) && !isInput(doc.activeElement)) {
-      event.stopPropagation();
-      event.preventDefault();
+  doc.body.addEventListener('keydown', function(e) {
+    if (isForwardSlash(e.code) && !isInput(doc.activeElement)) {
+      e.stopPropagation();
+      e.preventDefault();
       inputElement.focus();
       inputElement.select();
     }
-  };
+  }, false);
 };
 
 SearchUi.prototype.renderResults = function(query, results, renderResults) {

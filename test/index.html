@@ -13,13 +13,17 @@
   <script src="index.js"></script>
 
   <script>
-    mocha.checkLeaks();
-
-    if (window.mochaPhantomJS) {
-      mochaPhantomJS.run();
-    } else {
-      mocha.run();
+    if (window._phantom) {
+      window.KeyboardEvent = function(name, options) {
+        var keyboardEvent = document.createEvent('KeyboardEvent');
+        // Ugh.
+        keyboardEvent.initKeyboardEvent(name, true, true, window, 1, 0, 0);
+        return keyboardEvent;
+      };
     }
+
+    mocha.checkLeaks();
+    mocha.run();
   </script>
 </body>
 </html>

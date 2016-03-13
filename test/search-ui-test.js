@@ -72,20 +72,44 @@ describe('SearchUi', function() {
     searchUi.emptyResultsElementClass.should.eql('empty-results');
   });
 
+  // Per: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/
+  //
+  // Oddly, in Chrome, the only element set by the constructor is `code`.
+  // Since `KeyboardEvent.code` is the "correct" way to detect the key
+  // according to the latest standards, this is enough for the tests to pass
+  // on Chrome.
+  //
+  // However, Safari honors the constructor, but _doesn't_ set `code`. Hence,
+  // we need to force-override KeyboardEvent.keyCode as seen below.
+  //
+  // And PhantomJS currently doesn't support Event constructors at all:
+  // https://github.com/ariya/phantomjs/issues/11289
+  // Nor does it permit KeyboardEvent.keyCode to be redefined.
+  //
+  // What gives? It's just a stupid keydown event!
   createKeyboardShortcutEvent = function() {
     var keyboardEvent;
 
     if (global.window._phantom) {
-      // Hack alert! This should go away when PhantomJS properly supports
-      // Event constructors: https://github.com/ariya/phantomjs/issues/11289
       keyboardEvent = doc.createEvent('KeyboardEvent');
       keyboardEvent.initKeyboardEvent('keydown', true, true, global.window);
       keyboardEvent.code = SearchUi.GLOBAL_SHORTCUT_KEY_CODE;
       return keyboardEvent;
     }
-    return new global.window.KeyboardEvent('keydown', {
+
+    keyboardEvent = new global.window.KeyboardEvent('keydown', {
       code: SearchUi.GLOBAL_SHORTCUT_KEY_CODE
     });
+
+    if (!keyboardEvent.code) {
+      delete keyboardEvent.keyCode;
+      Object.defineProperty(keyboardEvent, 'keyCode', {
+        configurable: false,
+        enumerable: true,
+        value: SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE
+      });
+    }
+    return keyboardEvent;
   };
 
   it('shouldn\'t respond to shortcut before registration', function() {

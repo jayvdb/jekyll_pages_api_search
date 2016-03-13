@@ -25,10 +25,15 @@ SearchUi.DEFAULT_SEARCH_RESULTS_ID = 'search-results';
 SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX = 'No results found for';
 SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE = 'p';
 SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS = 'search-empty';
+SearchUi.GLOBAL_SHORTCUT_KEY = '/';
 SearchUi.GLOBAL_SHORTCUT_KEY_CODE = 'Slash';
+SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE = 191;
 
-function isForwardSlash(keyCode) {
-  return keyCode === SearchUi.GLOBAL_SHORTCUT_KEY_CODE;
+function isForwardSlash(keyEvent) {
+  // The former condition is more conformant; the latter for backward
+  // compatibility (i.e. Safari).
+  return keyEvent.code === SearchUi.GLOBAL_SHORTCUT_KEY_CODE ||
+    keyEvent.keyCode === SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE;
 }
 
 function isInput(element) {
@@ -40,7 +45,7 @@ SearchUi.prototype.enableGlobalShortcut = function() {
       inputElement = this.inputElement;
 
   doc.body.addEventListener('keydown', function(e) {
-    if (isForwardSlash(e.code) && !isInput(doc.activeElement)) {
+    if (isForwardSlash(e) && !isInput(doc.activeElement)) {
       e.stopPropagation();
       e.preventDefault();
       inputElement.focus();

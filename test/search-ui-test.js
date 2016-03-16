@@ -1,6 +1,6 @@
 'use strict';
 
-var SearchUi = require('../assets/js/search-ui.js');
+var SearchUi = require('../assets/js/search-ui');
 var chai = require('chai');
 var expect = chai.expect;
 

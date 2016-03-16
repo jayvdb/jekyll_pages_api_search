@@ -1,6 +1,6 @@
 'use strict';
 
-var SearchEngine = require('../assets/js/search-engine.js');
+var SearchEngine = require('../assets/js/search-engine');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 

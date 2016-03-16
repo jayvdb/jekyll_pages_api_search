@@ -1,29 +1,16 @@
 'use strict';
 
+var mergeOptions = require('./merge-options');
+
 module.exports = SearchUi;
 
 // eslint-disable-next-line
 // based on https://github.com/angular/angular.js/blob/54ddca537/docs/app/src/search.js#L198-L206
 function SearchUi(doc, options) {
-  var opts = options || {};
-
+  mergeOptions(SearchUi.DEFAULTS, options || {}, this);
   this.doc = doc;
-  this.inputElement = doc.getElementById(
-    opts.inputElementId || SearchUi.DEFAULTS.inputElementId);
-  this.resultsElement = doc.getElementById(
-    opts.searchResultsId || SearchUi.DEFAULTS.searchResultsId);
-  this.emptyResultsMessagePrefix = opts.emptyResultsMessagePrefix ||
-    SearchUi.DEFAULTS.emptyResultsMessagePrefix;
-  this.emptyResultsElementType = opts.emptyResultsElementType ||
-    SearchUi.DEFAULTS.emptyResultsElementType;
-  this.emptyResultsElementClass = opts.emptyResultsElementClass ||
-    SearchUi.DEFAULTS.emptyResultsElementClass;
-  this.globalShortcutKey = opts.globalShortcutKey ||
-    SearchUi.DEFAULTS.globalShortcutKey;
-  this.globalShortcutKeyCode = opts.globalShortcutKeyCode ||
-    SearchUi.DEFAULTS.globalShortcutKeyCode;
-  this.globalShortcutKeyNumericCode = opts.globalShortcutKeyNumericCode ||
-    SearchUi.DEFAULTS.globalShortcutKeyNumericCode;
+  this.inputElement = doc.getElementById(this.inputElementId);
+  this.resultsElement = doc.getElementById(this.searchResultsId);
 }
 
 SearchUi.DEFAULTS = {

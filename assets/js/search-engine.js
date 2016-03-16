@@ -2,6 +2,7 @@
 
 'use strict';
 
+var mergeOptions = require('./merge-options');
 var lunr = require('lunr');
 var querystring = require('querystring');
 var url = require('url');
@@ -9,10 +10,7 @@ var url = require('url');
 module.exports = SearchEngine;
 
 function SearchEngine(options) {
-  var opts = options || {};
-
-  this.indexPath = opts.indexPath || SearchEngine.DEFAULTS.indexPath;
-  this.queryParam = opts.queryParam || SearchEngine.DEFAULTS.queryParam;
+  mergeOptions(SearchEngine.DEFAULTS, options || {}, this);
 }
 
 SearchEngine.DEFAULTS = {

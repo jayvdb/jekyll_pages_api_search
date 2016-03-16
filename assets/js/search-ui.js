@@ -43,15 +43,12 @@ SearchUi.prototype.enableGlobalShortcut = function() {
       doc = this.doc,
       inputElement = this.inputElement;
 
-  inputElement.addEventListener('focus', function() {
-    inputElement.select();
-  });
-
   doc.body.addEventListener('keydown', function(e) {
     if (isForwardSlash(searchUi, e) && !isInput(doc.activeElement)) {
       e.stopPropagation();
       e.preventDefault();
       inputElement.focus();
+      inputElement.select();
     }
   }, false);
 };
@@ -63,20 +60,21 @@ SearchUi.prototype.renderResults = function(query, results, renderResults) {
   this.inputElement.value = query;
 
   if (results.length === 0) {
-    this.createEmptyResultsMessage(query);
+    createEmptyResultsMessage(this, query);
     this.inputElement.focus();
+    this.inputElement.select();
     return;
   }
   renderResults(query, results, this.doc, this.resultsElement);
 };
 
-SearchUi.prototype.createEmptyResultsMessage = function(query) {
-  var item = this.doc.createElement(this.emptyResultsElementType),
-      message = this.doc.createTextNode(
-        this.emptyResultsMessagePrefix + ' "' + query + '".'),
-      parentItem = this.resultsElement.parentElement;
+function createEmptyResultsMessage(searchUi, query) {
+  var item = searchUi.doc.createElement(searchUi.emptyResultsElementType),
+      message = searchUi.doc.createTextNode(
+        searchUi.emptyResultsMessagePrefix + ' "' + query + '".'),
+      parentItem = searchUi.resultsElement.parentElement;
 
-  item.style.className = this.emptyResultsElementClass;
+  item.className = searchUi.emptyResultsElementClass;
   item.appendChild(message);
-  parentItem.insertBefore(item, this.resultsElement);
-};
+  parentItem.insertBefore(item, searchUi.resultsElement);
+}

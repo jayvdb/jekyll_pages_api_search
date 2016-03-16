@@ -20,6 +20,7 @@
     "lunr": "^0.6.0",
     "mocha": "^2.4.5",
     "mocha-phantomjs": "^4.0.2",
+    "sinon": "^1.17.3",
     "temp": "^0.8.3",
     "uglifyify": "3.x.x",
     "vinyl-buffer": "^1.0.0",

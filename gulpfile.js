@@ -5,6 +5,7 @@ var exec = require('child_process').exec;
 var size = require('gulp-size');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var mochaPhantomJs = require('gulp-mocha-phantomjs');
 
 gulp.task('lint', function() {
   var sources = [
@@ -36,6 +37,34 @@ gulp.task('test-bundle', function() {
     .pipe(gulp.dest('test'));
 });
 
-gulp.task('prepare-tests', ['test-index', 'test-bundle'], function(done) {
+gulp.task('search-bundle', function() {
+  var bundler = browserify('assets/js/search.js');
+
+  bundler.transform({ global: true }, 'uglifyify');
+  return bundler.bundle()
+    .pipe(source('search-bundle.js'))
+    .pipe(buffer())
+    .pipe(size())
+    .pipe(gulp.dest('assets/js'));
+});
+
+var TEST_DEPENDENCIES = [
+  'test-index',
+  'test-bundle',
+  'search-bundle'
+];
+
+gulp.task('prepare-tests', TEST_DEPENDENCIES, function(done) {
   done();
+});
+
+gulp.task('test', ['prepare-tests'], function() {
+  var options = {
+    reporter: 'spec',
+    phantomjs: {
+      useColors: true
+    }
+  };
+  return gulp.src('test/index.html')
+    .pipe(mochaPhantomJs(options));
 });

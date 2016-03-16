@@ -72,62 +72,64 @@ describe('SearchUi', function() {
     searchUi.emptyResultsElementClass.should.eql('empty-results');
   });
 
-  // Per: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/
-  //
-  // Oddly, in Chrome, the only element set by the constructor is `code`.
-  // Since `KeyboardEvent.code` is the "correct" way to detect the key
-  // according to the latest standards, this is enough for the tests to pass
-  // on Chrome.
-  //
-  // However, Safari honors the constructor, but _doesn't_ set `code`. Hence,
-  // we need to force-override KeyboardEvent.keyCode as seen below.
-  //
-  // And PhantomJS currently doesn't support Event constructors at all:
-  // https://github.com/ariya/phantomjs/issues/11289
-  // Nor does it permit KeyboardEvent.keyCode to be redefined.
-  //
-  // What gives? It's just a stupid keydown event!
-  createKeyboardShortcutEvent = function() {
-    var keyboardEvent;
+  describe('enableGlobalShortcut', function() {
+    // Per: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/
+    //
+    // Oddly, in Chrome, the only element set by the constructor is `code`.
+    // Since `KeyboardEvent.code` is the "correct" way to detect the key
+    // according to the latest standards, this is enough for the tests to pass
+    // on Chrome.
+    //
+    // However, Safari honors the constructor, but _doesn't_ set `code`.
+    // Hence, we need to force-override KeyboardEvent.keyCode as seen below.
+    //
+    // And PhantomJS currently doesn't support Event constructors at all:
+    // https://github.com/ariya/phantomjs/issues/11289
+    // Nor does it permit KeyboardEvent.keyCode to be redefined.
+    //
+    // What gives? It's just a stupid keydown event!
+    createKeyboardShortcutEvent = function() {
+      var keyboardEvent;
 
-    if (global.window._phantom) {
-      keyboardEvent = doc.createEvent('KeyboardEvent');
-      keyboardEvent.initKeyboardEvent('keydown', true, true, global.window);
-      keyboardEvent.code = SearchUi.DEFAULTS.globalShortcutKeyCode;
+      if (global.window._phantom) {
+        keyboardEvent = doc.createEvent('KeyboardEvent');
+        keyboardEvent.initKeyboardEvent('keydown', true, true, global.window);
+        keyboardEvent.code = SearchUi.DEFAULTS.globalShortcutKeyCode;
+        return keyboardEvent;
+      }
+
+      keyboardEvent = new global.window.KeyboardEvent('keydown', {
+        code: SearchUi.DEFAULTS.globalShortcutKeyCode
+      });
+
+      if (!keyboardEvent.code) {
+        delete keyboardEvent.keyCode;
+        Object.defineProperty(keyboardEvent, 'keyCode', {
+          configurable: false,
+          enumerable: true,
+          value: SearchUi.DEFAULTS.globalShortcutKeyNumericCode
+        });
+      }
       return keyboardEvent;
-    }
+    };
 
-    keyboardEvent = new global.window.KeyboardEvent('keydown', {
-      code: SearchUi.DEFAULTS.globalShortcutKeyCode
+    it('shouldn\'t respond to shortcut before registration', function() {
+      var shortcutEvent = createKeyboardShortcutEvent();
+      searchUi.inputElement.blur();
+      searchUi.inputElement.value = 'foobar';
+      doc.body.dispatchEvent(shortcutEvent);
+      doc.activeElement.should.not.eql(searchUi.inputElement);
+      doc.getSelection().toString().should.eql('');
     });
 
-    if (!keyboardEvent.code) {
-      delete keyboardEvent.keyCode;
-      Object.defineProperty(keyboardEvent, 'keyCode', {
-        configurable: false,
-        enumerable: true,
-        value: SearchUi.DEFAULTS.globalShortcutKeyNumericCode
-      });
-    }
-    return keyboardEvent;
-  };
-
-  it('shouldn\'t respond to shortcut before registration', function() {
-    var shortcutEvent = createKeyboardShortcutEvent();
-    searchUi.inputElement.blur();
-    searchUi.inputElement.value = 'foobar';
-    doc.body.dispatchEvent(shortcutEvent);
-    doc.activeElement.should.not.eql(searchUi.inputElement);
-    doc.getSelection().toString().should.eql('');
-  });
-
-  it('should respond to global shortcut after registration', function() {
-    var shortcutEvent = createKeyboardShortcutEvent();
-    searchUi.enableGlobalShortcut();
-    searchUi.inputElement.blur();
-    searchUi.inputElement.value = 'foobar';
-    doc.body.dispatchEvent(shortcutEvent);
-    doc.activeElement.should.eql(searchUi.inputElement);
-    doc.getSelection().toString().should.eql('foobar');
+    it('should respond to global shortcut after registration', function() {
+      var shortcutEvent = createKeyboardShortcutEvent();
+      searchUi.enableGlobalShortcut();
+      searchUi.inputElement.blur();
+      searchUi.inputElement.value = 'foobar';
+      doc.body.dispatchEvent(shortcutEvent);
+      doc.activeElement.should.eql(searchUi.inputElement);
+      doc.getSelection().toString().should.eql('foobar');
+    });
   });
 });

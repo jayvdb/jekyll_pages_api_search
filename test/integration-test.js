@@ -35,9 +35,12 @@ describe('Integration test', function() {
         searchResults = frameDoc.getElementById(
           SearchUi.DEFAULTS.searchResultsId);
 
+        // Set observer to fire after the search logic has loaded the index,
+        // executed the search, and updated the search results element.
+        //
+        // PhantomJS does all this before this point, hence the childNodes
+        // check and pass-through to resolve() in the else clause.
         if (searchResults !== null && searchResults.childNodes.length === 0) {
-          // Set observer to fire after the search logic has loaded the index,
-          // executed the search, and updated the search results element.
           observer = new MutationObserver(function() {
             resolve(searchResults.childNodes);
           });
@@ -51,14 +54,16 @@ describe('Integration test', function() {
   };
 
   it('should load the bundle but not show results', function() {
-    return loadPageInFrame('no-results-element.html?q=foo')
-      .then(function() {
+    return loadPageInFrame('no-results-element.html?q=document')
+      .then(function(searchResultNodes) {
         // There should be no search results at all, since the search results
         // element isn't present.
         expect(searchInput).to.not.be.null;
         expect(searchResults).to.be.null;
+        expect(searchResultNodes).to.be.empty;
 
-        // The global '/' shortcut should still work, though.
+        // The global '/' shortcut should still work, though. The query text
+        // won't get added to the search box, however.
         frameDoc.body.dispatchEvent(shortcutEvent);
         expect(frameDoc.activeElement).to.eql(searchInput);
         frameDoc.getSelection().toString().should.eql('');

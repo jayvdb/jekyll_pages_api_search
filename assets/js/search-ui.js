@@ -27,12 +27,12 @@ SearchUi.DEFAULTS = {
   globalShortcutKeyNumericCode: 191
 };
 
-SearchUi.prototype.isForwardSlash = function(keyEvent) {
+function isForwardSlash(searchUi, keyEvent) {
   // The former condition is more conformant; the latter for backward
   // compatibility (i.e. Safari).
-  return keyEvent.code === this.globalShortcutKeyCode ||
-    keyEvent.keyCode === this.globalShortcutKeyNumericCode;
-};
+  return keyEvent.code === searchUi.globalShortcutKeyCode ||
+    keyEvent.keyCode === searchUi.globalShortcutKeyNumericCode;
+}
 
 function isInput(element) {
   return element.tagName.toLowerCase() === 'input';
@@ -43,12 +43,15 @@ SearchUi.prototype.enableGlobalShortcut = function() {
       doc = this.doc,
       inputElement = this.inputElement;
 
+  inputElement.addEventListener('focus', function() {
+    inputElement.select();
+  });
+
   doc.body.addEventListener('keydown', function(e) {
-    if (searchUi.isForwardSlash(e) && !isInput(doc.activeElement)) {
+    if (isForwardSlash(searchUi, e) && !isInput(doc.activeElement)) {
       e.stopPropagation();
       e.preventDefault();
       inputElement.focus();
-      inputElement.select();
     }
   }, false);
 };

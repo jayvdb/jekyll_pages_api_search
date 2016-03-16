@@ -11,7 +11,7 @@ chai.should();
 describe('SearchUi', function() {
   var searchUi, doc, searchForm,
       searchInput, searchResults, // eslint-disable-line no-unused-vars
-      makeElement, createdElements;
+      makeElement, createdElements, getSelection;
 
   beforeEach(function() {
     doc = global.document;
@@ -74,6 +74,12 @@ describe('SearchUi', function() {
     searchUi.emptyResultsElementClass.should.eql('empty-results');
   });
 
+  getSelection = function() {
+    var elem = doc.activeElement;
+    return elem.value ?
+      elem.value.substring(elem.selectionStart, elem.selectionEnd) : '';
+  };
+
   describe('enableGlobalShortcut', function() {
     beforeEach(function() {
       searchUi.inputElement.blur();
@@ -84,7 +90,7 @@ describe('SearchUi', function() {
       var shortcutEvent = createKeyboardShortcutEvent(global.window, doc);
       doc.body.dispatchEvent(shortcutEvent);
       doc.activeElement.should.not.eql(searchUi.inputElement);
-      doc.getSelection().toString().should.eql('');
+      getSelection().should.eql('');
     });
 
     it('should respond to global shortcut after registration', function() {
@@ -92,7 +98,7 @@ describe('SearchUi', function() {
       searchUi.enableGlobalShortcut();
       doc.body.dispatchEvent(shortcutEvent);
       doc.activeElement.should.eql(searchUi.inputElement);
-      doc.getSelection().toString().should.eql('foobar');
+      getSelection().should.eql('foobar');
     });
   });
 
@@ -125,7 +131,7 @@ describe('SearchUi', function() {
       searchUi.renderResults('', searchResults, renderResults);
       getEmptyResultsElement().should.eql([]);
       doc.activeElement.should.not.eql(searchUi.inputElement);
-      doc.getSelection().toString().should.eql('');
+      getSelection().should.eql('');
       renderResults.called.should.be.false;
     });
 
@@ -143,7 +149,7 @@ describe('SearchUi', function() {
         searchUi.emptyResultsMessagePrefix + ' "foobar".');
 
       doc.activeElement.should.eql(searchUi.inputElement);
-      doc.getSelection().toString().should.eql('foobar');
+      getSelection().should.eql('foobar');
       renderResults.called.should.be.false;
     });
 
@@ -153,7 +159,7 @@ describe('SearchUi', function() {
       searchUi.renderResults('foobar', searchResults, renderResults);
       getEmptyResultsElement().should.eql([]);
       doc.activeElement.should.not.eql(searchUi.inputElement);
-      doc.getSelection().toString().should.eql('');
+      getSelection().should.eql('');
       renderResults.called.should.be.true;
       renderResults.args.should.eql([
         ['foobar', searchResults, searchUi.doc, searchUi.resultsElement]

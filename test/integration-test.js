@@ -11,7 +11,7 @@ chai.should();
 
 describe('Integration test', function() {
   var testFrame, frameDoc, shortcutEvent, searchInput, loadPageInFrame,
-      searchResults;
+      getSelection, searchResults;
 
   beforeEach(function() {
     testFrame = global.document.createElement('iframe');
@@ -53,6 +53,12 @@ describe('Integration test', function() {
     });
   };
 
+  getSelection = function() {
+    var elem = frameDoc.activeElement;
+    return elem.value ?
+      elem.value.substring(elem.selectionStart, elem.selectionEnd) : '';
+  };
+
   it('should load the bundle but not show results', function() {
     return loadPageInFrame('no-results-element.html?q=document')
       .then(function(searchResultNodes) {
@@ -66,7 +72,7 @@ describe('Integration test', function() {
         // won't get added to the search box, however.
         frameDoc.body.dispatchEvent(shortcutEvent);
         expect(frameDoc.activeElement).to.eql(searchInput);
-        frameDoc.getSelection().toString().should.eql('');
+        getSelection().should.eql('');
       });
   });
 
@@ -87,7 +93,7 @@ describe('Integration test', function() {
         // selects the pre-filled query text.
         frameDoc.body.dispatchEvent(shortcutEvent);
         expect(frameDoc.activeElement).to.eql(searchInput);
-        frameDoc.getSelection().toString().should.eql('document');
+        getSelection().should.eql('document');
       });
   });
 });

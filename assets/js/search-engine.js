@@ -11,12 +11,14 @@ module.exports = SearchEngine;
 function SearchEngine(options) {
   var opts = options || {};
 
-  this.indexPath = opts.indexPath || SearchEngine.DEFAULT_SEARCH_INDEX_PATH;
-  this.queryParam = opts.queryParam || SearchEngine.DEFAULT_QUERY_PARAM;
+  this.indexPath = opts.indexPath || SearchEngine.DEFAULTS.indexPath;
+  this.queryParam = opts.queryParam || SearchEngine.DEFAULTS.queryParam;
 }
 
-SearchEngine.DEFAULT_SEARCH_INDEX_PATH = '/search-index.json';
-SearchEngine.DEFAULT_QUERY_PARAM = 'q';
+SearchEngine.DEFAULTS = {
+  indexPath: '/search-index.json',
+  queryParam: 'q'
+};
 
 SearchEngine.prototype.fetchIndex = function(baseUrl) {
   var engine = this;

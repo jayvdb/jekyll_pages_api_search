@@ -19,8 +19,8 @@ describe('SearchEngine', function() {
   });
 
   it('should initialize with the default values', function() {
-    searchEngine.indexPath.should.eql(SearchEngine.DEFAULT_SEARCH_INDEX_PATH);
-    searchEngine.queryParam.should.eql(SearchEngine.DEFAULT_QUERY_PARAM);
+    searchEngine.indexPath.should.eql(SearchEngine.DEFAULTS.indexPath);
+    searchEngine.queryParam.should.eql(SearchEngine.DEFAULTS.queryParam);
   });
 
   it('should initialize with optional values', function() {

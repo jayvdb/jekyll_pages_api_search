@@ -16,9 +16,9 @@ describe('SearchUi', function() {
     createdElements = [];
 
     searchForm = makeElement('form', 'search-form', doc.body);
-    searchInput = makeElement('input', SearchUi.DEFAULT_SEARCH_INPUT_ID,
+    searchInput = makeElement('input', SearchUi.DEFAULTS.inputElementId,
       searchForm);
-    searchResults = makeElement('ol', SearchUi.DEFAULT_SEARCH_RESULTS_ID,
+    searchResults = makeElement('ol', SearchUi.DEFAULTS.searchResultsId,
       doc.body);
 
     searchUi = new SearchUi(global.document);
@@ -44,11 +44,11 @@ describe('SearchUi', function() {
     expect(searchUi.inputElement).to.be.searchInput;
     expect(searchUi.resultsElement).to.be.searchResults;
     searchUi.emptyResultsMessagePrefix.should.eql(
-      SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX);
+      SearchUi.DEFAULTS.emptyResultsMessagePrefix);
     searchUi.emptyResultsElementType.should.eql(
-      SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE);
+      SearchUi.DEFAULTS.emptyResultsElementType);
     searchUi.emptyResultsElementClass.should.eql(
-      SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS);
+      SearchUi.DEFAULTS.emptyResultsElementClass);
   });
 
   it('should initialize with optional values', function() {
@@ -93,12 +93,12 @@ describe('SearchUi', function() {
     if (global.window._phantom) {
       keyboardEvent = doc.createEvent('KeyboardEvent');
       keyboardEvent.initKeyboardEvent('keydown', true, true, global.window);
-      keyboardEvent.code = SearchUi.GLOBAL_SHORTCUT_KEY_CODE;
+      keyboardEvent.code = SearchUi.DEFAULTS.globalShortcutKeyCode;
       return keyboardEvent;
     }
 
     keyboardEvent = new global.window.KeyboardEvent('keydown', {
-      code: SearchUi.GLOBAL_SHORTCUT_KEY_CODE
+      code: SearchUi.DEFAULTS.globalShortcutKeyCode
     });
 
     if (!keyboardEvent.code) {
@@ -106,7 +106,7 @@ describe('SearchUi', function() {
       Object.defineProperty(keyboardEvent, 'keyCode', {
         configurable: false,
         enumerable: true,
-        value: SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE
+        value: SearchUi.DEFAULTS.globalShortcutKeyNumericCode
       });
     }
     return keyboardEvent;

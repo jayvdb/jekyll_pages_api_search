@@ -9,43 +9,55 @@ function SearchUi(doc, options) {
 
   this.doc = doc;
   this.inputElement = doc.getElementById(
-    opts.inputElementId || SearchUi.DEFAULT_SEARCH_INPUT_ID);
+    opts.inputElementId || SearchUi.DEFAULTS.inputElementId);
   this.resultsElement = doc.getElementById(
-    opts.searchResultsId || SearchUi.DEFAULT_SEARCH_RESULTS_ID);
+    opts.searchResultsId || SearchUi.DEFAULTS.searchResultsId);
   this.emptyResultsMessagePrefix = opts.emptyResultsMessagePrefix ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX;
+    SearchUi.DEFAULTS.emptyResultsMessagePrefix;
   this.emptyResultsElementType = opts.emptyResultsElementType ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE;
+    SearchUi.DEFAULTS.emptyResultsElementType;
   this.emptyResultsElementClass = opts.emptyResultsElementClass ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS;
+    SearchUi.DEFAULTS.emptyResultsElementClass;
+  this.globalShortcutKey = opts.globalShortcutKey ||
+    SearchUi.DEFAULTS.globalShortcutKey;
+  this.globalShortcutKeyCode = opts.globalShortcutKeyCode ||
+    SearchUi.DEFAULTS.globalShortcutKeyCode;
+  this.globalShortcutKeyNumericCode = opts.globalShortcutKeyNumericCode ||
+    SearchUi.DEFAULTS.globalShortcutKeyNumericCode;
 }
 
-SearchUi.DEFAULT_SEARCH_INPUT_ID = 'search-input';
-SearchUi.DEFAULT_SEARCH_RESULTS_ID = 'search-results';
-SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX = 'No results found for';
-SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE = 'p';
-SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS = 'search-empty';
-SearchUi.GLOBAL_SHORTCUT_KEY = '/';
-SearchUi.GLOBAL_SHORTCUT_KEY_CODE = 'Slash';
-SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE = 191;
+SearchUi.DEFAULTS = {
+  inputElementId: 'search-input',
+  searchResultsId: 'search-results',
+  emptyResultsMessagePrefix: 'No results found for',
+  emptyResultsElementType: 'p',
+  emptyResultsElementClass: 'search-empty',
 
-function isForwardSlash(keyEvent) {
+  // Note that if any of these change, they must all change. It's the
+  // responsibility of the caller to ensure they remain correct and in-sync.
+  globalShortcutKey: '/',
+  globalShortcutKeyCode: 'Slash',
+  globalShortcutKeyNumericCode: 191
+};
+
+SearchUi.prototype.isForwardSlash = function(keyEvent) {
   // The former condition is more conformant; the latter for backward
   // compatibility (i.e. Safari).
-  return keyEvent.code === SearchUi.GLOBAL_SHORTCUT_KEY_CODE ||
-    keyEvent.keyCode === SearchUi.GLOBAL_SHORTCUT_KEY_NUMERIC_CODE;
-}
+  return keyEvent.code === this.globalShortcutKeyCode ||
+    keyEvent.keyCode === this.globalShortcutKeyNumericCode;
+};
 
 function isInput(element) {
   return element.tagName.toLowerCase() === 'input';
 }
 
 SearchUi.prototype.enableGlobalShortcut = function() {
-  var doc = this.doc,
+  var searchUi = this,
+      doc = this.doc,
       inputElement = this.inputElement;
 
   doc.body.addEventListener('keydown', function(e) {
-    if (isForwardSlash(e) && !isInput(doc.activeElement)) {
+    if (searchUi.isForwardSlash(e) && !isInput(doc.activeElement)) {
       e.stopPropagation();
       e.preventDefault();
       inputElement.focus();

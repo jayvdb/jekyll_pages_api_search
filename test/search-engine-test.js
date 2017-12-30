@@ -46,7 +46,10 @@ describe('SearchEngine', function() {
     return searchEngine.executeSearch('data', '/?q=second+example')
       .should.be.fulfilled.then(function(results) {
         results.query.should.eql('second example');
-        results.results.length.should.eql(1);
+
+        // Since "example" appears in all three documents, we'll expect all
+        // three to be returned, but `/bar` should rank at the top.
+        results.results.length.should.eql(3);
         results.results[0].ref.should.eql('/bar');
       });
   });

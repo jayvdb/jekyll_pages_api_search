@@ -43,8 +43,8 @@ describe('SearchUi', function() {
   it('should initialize with the default values', function() {
     doc.should.not.be.undefined;
     searchUi.doc.should.eql(global.document);
-    expect(searchUi.inputElement).to.be.searchInput;
-    expect(searchUi.resultsElement).to.be.searchResults;
+    expect(searchUi.inputElement).to.equal(searchInput);
+    expect(searchUi.resultsElement).to.equal(searchResults);
     searchUi.emptyResultsMessagePrefix.should.eql(
       SearchUi.DEFAULTS.emptyResultsMessagePrefix);
     searchUi.emptyResultsElementType.should.eql(
@@ -67,8 +67,8 @@ describe('SearchUi', function() {
       emptyResultsElementClass: 'empty-results'
     });
 
-    expect(searchUi.inputElement).to.be.altInput;
-    expect(searchUi.resultsElement).to.be.altResults;
+    expect(searchUi.inputElement).to.equal(altInput);
+    expect(searchUi.resultsElement).to.equal(altResults);
     searchUi.emptyResultsMessagePrefix.should.eql('Zero results for:');
     searchUi.emptyResultsElementType.should.eql('div');
     searchUi.emptyResultsElementClass.should.eql('empty-results');

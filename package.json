@@ -17,7 +17,7 @@
     "gulp-eslint": "^4.0.0",
     "gulp-mocha-phantomjs": "^0.12.2",
     "gulp-size": "^3.0.0",
-    "http-server": "^0.10.0",
+    "live-server": "^1.2.0",
     "lunr": "^2.1.5",
     "mocha": "^4.1.0",
     "mocha-phantomjs-core": "^2.1.2",
@@ -48,7 +48,7 @@
     "minify-lunr": "uglifyjs node_modules/lunr/lunr.js -c -m > lib/jekyll_pages_api_search/lunr.min.js",
     "make-bundle": "gulp search-bundle",
     "lint": "gulp lint",
-    "serve-tests": "gulp prepare-tests && http-server -c-1 .",
+    "serve-tests": "gulp prepare-tests && live-server --open=test/",
     "test": "gulp test"
   }
 }

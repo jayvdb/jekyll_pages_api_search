@@ -5,7 +5,6 @@ var exec = require('child_process').exec;
 var size = require('gulp-size');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var mochaPhantomJs = require('gulp-mocha-phantomjs');
 
 gulp.task('lint', function() {
   var sources = [
@@ -56,15 +55,4 @@ var TEST_DEPENDENCIES = [
 
 gulp.task('prepare-tests', TEST_DEPENDENCIES, function(done) {
   done();
-});
-
-gulp.task('test', ['prepare-tests'], function() {
-  var options = {
-    reporter: 'spec',
-    phantomjs: {
-      useColors: true
-    }
-  };
-  return gulp.src('test/index.html')
-    .pipe(mochaPhantomJs(options));
 });

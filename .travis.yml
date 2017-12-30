@@ -1,7 +1,21 @@
 language: ruby
-script: bundle exec rake ci_build
+script:
+- bundle exec rake ci_build
+- node_modules/.bin/gulp prepare-tests
+- scripts/test
 rvm:
-- 2.2.0
+- 2.5
+node_js:
+- node
+dist: trusty
+sudo: false
+cache:
+  directories:
+    - node_modules
+addons:
+  apt:
+    packages:
+    - google-chrome-stable
 env:
   global:
     secure: 

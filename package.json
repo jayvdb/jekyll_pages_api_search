@@ -30,16 +30,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:18F/jekyll_pages_api_search.git"
+    "url": "git@github.com:mbland/jekyll_pages_api_search.git"
   },
   "keywords": [
     "jekyll",
     "lunr.js",
-    "search",
-    "18F"
+    "search"
   ],
-  "author": "Mike Bland <michael.bland@gsa.gov> (https://18f.gsa.gov/)",
-  "license": "CC0-1.0",
+  "author": "Mike Bland <mbland@acm.org> (https://mike-bland.com/)",
+  "license": "ISC",
   "directories": {
     "test": "test"
   },

@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require 'jekyll_pages_api'
 require 'safe_yaml'
 

@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require_relative './sass'
 require_relative './tags'
 

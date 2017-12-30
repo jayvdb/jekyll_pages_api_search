@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require_relative 'test_helper'
 require_relative 'site_builder'
 require_relative '../lib/jekyll_pages_api_search'

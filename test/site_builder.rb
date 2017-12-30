@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require 'test_temp_file_helper'
 
 module JekyllPagesApiSearch

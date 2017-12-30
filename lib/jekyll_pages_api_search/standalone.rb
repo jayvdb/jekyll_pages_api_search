@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require_relative './compressor'
 require_relative './site'
 require 'fileutils'

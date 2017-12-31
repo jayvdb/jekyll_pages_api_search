@@ -18,7 +18,7 @@ module JekyllPagesApiSearch
     end
 
     def self.execute_browserify(source, target)
-      status = system("node #{BROWSERIFY_SCRIPT} #{source} #{target}")
+      status = system('node', "#{BROWSERIFY_SCRIPT}", "#{source}", "#{target}")
       if $CHILD_STATUS.exitstatus.nil?
         $stderr.puts('Could not execute browserify script')
         exit 1

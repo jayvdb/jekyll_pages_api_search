@@ -12,6 +12,7 @@ module JekyllPagesApiSearch
       return if Config.skip_index?(site)
       JekyllPagesApiSearch::SearchPageLayouts.register(site)
       site.pages << JekyllPagesApiSearch::SearchPage.new(site)
+      JekyllPagesApiSearch::Browserify.create_bundle(site)
       JekyllPagesApiSearch::Assets.copy_to_site(site)
     end
   end

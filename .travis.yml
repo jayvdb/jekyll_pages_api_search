@@ -4,8 +4,8 @@ rvm:
 os:
 - linux
 - osx
-node_js:
-- node
+before_install:
+- nvm install node
 dist: trusty
 sudo: false
 
@@ -14,9 +14,7 @@ cache:
     - node_modules
 
 addons:
-  apt:
-    packages:
-    - google-chrome-stable
+  chrome: stable
 
 env:
   global:

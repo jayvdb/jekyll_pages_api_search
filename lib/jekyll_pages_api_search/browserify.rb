@@ -3,6 +3,7 @@ require_relative './config'
 require 'English'
 require 'jekyll/static_file'
 require 'jekyll_pages_api'
+require 'json'
 
 module JekyllPagesApiSearch
   class Browserify
@@ -14,11 +15,13 @@ module JekyllPagesApiSearch
       return if browserify_config.nil?
       source = File.join(site.source, browserify_config['source'])
       target = File.join(site.dest, browserify_config['target'])
-      execute_browserify(source, target)
+      execute_browserify(source, target,
+        { standalone: 'renderJekyllPagesApiSearchResults' })
     end
 
-    def self.execute_browserify(source, target)
-      status = system('node', "#{BROWSERIFY_SCRIPT}", "#{source}", "#{target}")
+    def self.execute_browserify(source, target, options)
+      status = system('node', "#{BROWSERIFY_SCRIPT}", "#{source}", "#{target}",
+        JSON.generate(options))
       if $CHILD_STATUS.exitstatus.nil?
         $stderr.puts('Could not execute browserify script')
         exit 1

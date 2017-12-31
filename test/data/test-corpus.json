@@ -1,0 +1,30 @@
+{
+  "indexFields": {
+    "title": { "boost": 10 },
+    "tags": { "boost": 10 },
+    "url": { "boost": 5 },
+    "body": null
+  },
+  "corpus": {
+    "entries": [
+      {
+        "title": "Foo",
+        "url": "/foo",
+        "tags": ["foo", "example"],
+        "body": "This foo document is the first example used in the tests."
+      },
+      {
+        "title": "Bar",
+        "url": "/bar",
+        "tags": ["bar", "example"],
+        "body": "This bar document is the second example used in the tests."
+      },
+      {
+        "title": "Baz",
+        "url": "/baz",
+        "tags": ["baz", "example"],
+        "body": "This baz document is the third example used in the tests."
+      }
+    ]
+  }
+}

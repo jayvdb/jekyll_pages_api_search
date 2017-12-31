@@ -54,10 +54,10 @@ task :update_js_components => :check_for_node do
 end
 
 LIB_LUNR_TARGET = File.join %w(lib jekyll_pages_api_search lunr.min.js)
-LIB_LUNR_SOURCE = File.join %w(node_modules lunr lunr.min.js)
+LIB_LUNR_SOURCE = File.join %w(node_modules lunr lunr.js)
 
 file LIB_LUNR_TARGET => LIB_LUNR_SOURCE do
-  FileUtils.cp LIB_LUNR_SOURCE, LIB_LUNR_TARGET
+  abort unless system 'npm', 'run', 'minify-lunr'
 end
 
 main_js = PACKAGE_INFO['main']

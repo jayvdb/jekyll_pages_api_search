@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jekyll_pages_api_search browser test - no results element</title>
+</head>
+<body>
+  <form>
+    <input type="search" id="search-input" name="q">
+  </form>
+  <ol id="search-results"></ol>
+</body>
+<script>
+var JEKYLL_PAGES_API_SEARCH_BASEURL = 'data/';
+var JEKYLL_PAGES_API_SEARCH_UI_OPTIONS = {
+  emptyResultsMessagePrefix: 'Search returned no results:'
+};
+var JEKYLL_PAGES_API_SEARCH_ENGINE_OPTIONS = {
+  indexPath: 'search-index.json'
+};
+
+// PhantomJS doesn't natively support Promises as of 2.1.1. test/index.html
+// loads this file into an iframe after loading the Promise polyfill from
+// test/test-bundle.js. However, we must manually pull Promise into the iframe.
+var Promise = window.parent.Promise;
+</script>
+<script async src="../assets/js/search-bundle.js"></script>
+</html>

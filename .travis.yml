@@ -1,7 +1,26 @@
 language: ruby
-script: bundle exec rake ci_build
 rvm:
-- 2.2.0
+- 2.5
+os:
+- linux
+- osx
+before_install:
+- nvm install node
+dist: trusty
+sudo: false
+
+cache:
+  directories:
+    - node_modules
+
+addons:
+  chrome: stable
+
 env:
   global:
     secure: 
+
+script:
+- bundle exec rake ci_build
+- npm run prepare-tests
+- scripts/test

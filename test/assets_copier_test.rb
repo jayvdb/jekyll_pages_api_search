@@ -1,8 +1,6 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
-require_relative 'test_helper'
 require_relative '../lib/jekyll_pages_api_search/assets'
 
+require 'jekyll'
 require 'fileutils'
 require 'minitest/autorun'
 require 'tmpdir'
@@ -14,21 +12,35 @@ module JekyllPagesApiSearch
     def initialize
       @static_files = []
     end
+
+    def config
+      {}
+    end
+
+    def frontmatter_defaults
+      Jekyll::FrontmatterDefaults.new(self)
+    end
+  end
+
+  def self.expected_bundle_files(output_dir)
+    expected = [
+      File.join(Assets::JAVASCRIPT_DIR, 'search-bundle.js'),
+      File.join(Assets::JAVASCRIPT_DIR, 'search-bundle.js.gz'),
+      File.join('assets', 'png', 'search.png'),
+      File.join('assets', 'svg', 'search.svg'),
+    ]
+    expected.map{|f| File.join(output_dir, f)}.sort()
   end
 
   class AssetsCopyToSiteTest < ::Minitest::Test
     def test_copy_to_site
       site = DummySite.new
       Assets::copy_to_site(site)
-      bundle, bundle_gz = site.static_files
-      refute_nil bundle
-      refute_nil bundle_gz
 
-      output_dir = File.join(Assets::SOURCE, Assets::JAVASCRIPT_DIR)
-      assert_equal File.join(output_dir, 'search-bundle.js'), bundle.path
-      assert_equal Assets::JAVASCRIPT_DIR, bundle.destination_rel_dir
-      assert_equal File.join(output_dir, 'search-bundle.js.gz'), bundle_gz.path
-      assert_equal Assets::JAVASCRIPT_DIR, bundle_gz.destination_rel_dir
+      # StaticFile.path() returns the original path of the file, not the
+      # destiation path.
+      assert_equal(JekyllPagesApiSearch::expected_bundle_files(Assets::SOURCE),
+        site.static_files.map{|f| f.path() }.sort())
     end
   end
 
@@ -45,12 +57,8 @@ module JekyllPagesApiSearch
 
     def test_copy_to_basedir
       Assets::copy_to_basedir(self.basedir)
-      assets_dir = File.join(self.basedir, Assets::JAVASCRIPT_DIR)
-      assert(Dir.exist?(assets_dir))
-      expected = ['search-bundle.js', 'search-bundle.js.gz'].map do |f|
-        File.join(assets_dir, f)
-      end
-      assert_equal(expected, Dir[File.join assets_dir, '*'])
+      assert_equal(JekyllPagesApiSearch::expected_bundle_files(self.basedir),
+        Dir[File.join(self.basedir, 'assets', '**', '*.*')].sort())
     end
   end
 end

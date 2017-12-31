@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require_relative './jekyll_pages_api_search/assets'
 require_relative './jekyll_pages_api_search/generator'
 require_relative './jekyll_pages_api_search/sass'

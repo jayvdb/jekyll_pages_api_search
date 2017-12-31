@@ -1,5 +1,3 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
 require 'sass'
 
 module JekyllPagesApiSearch

@@ -1,7 +1,5 @@
-# @author Mike Bland (michael.bland@gsa.gov)
-
-require_relative 'test_helper'
 require_relative 'site_builder'
+require_relative '../lib/jekyll_pages_api_search/search'
 require_relative '../lib/jekyll_pages_api_search/tags'
 
 require 'json'
@@ -44,12 +42,9 @@ module JekyllPagesApiSearch
 
         index = search_index['index']
         refute_empty index
-        refute_nil index['corpusTokens']
-        refute_nil index['documentStore']
+        refute_nil index['invertedIndex']
         refute_nil index['fields']
         refute_nil index['pipeline']
-        refute_nil index['ref']
-        refute_nil index['tokenStore']
         refute_nil index['version']
 
         url_to_doc = search_index['urlToDoc']
@@ -72,8 +67,14 @@ module JekyllPagesApiSearch
       end
     end
 
+    class FakeParseContext
+      def line_number
+        27
+      end
+    end
+
     def get_tag(name)
-      Liquid::Template.tags[name].parse(nil, nil, nil, {})
+      Liquid::Template.tags[name].parse(nil, nil, nil, FakeParseContext.new)
     end
 
     def test_interface_style_present

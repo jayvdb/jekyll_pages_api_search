@@ -2,6 +2,7 @@
 
 'use strict';
 
+var mergeOptions = require('./merge-options');
 var lunr = require('lunr');
 var querystring = require('querystring');
 var url = require('url');
@@ -9,14 +10,13 @@ var url = require('url');
 module.exports = SearchEngine;
 
 function SearchEngine(options) {
-  var opts = options || {};
-
-  this.indexPath = opts.indexPath || SearchEngine.DEFAULT_SEARCH_INDEX_PATH;
-  this.queryParam = opts.queryParam || SearchEngine.DEFAULT_QUERY_PARAM;
+  mergeOptions(SearchEngine.DEFAULTS, options || {}, this);
 }
 
-SearchEngine.DEFAULT_SEARCH_INDEX_PATH = '/search-index.json';
-SearchEngine.DEFAULT_QUERY_PARAM = 'q';
+SearchEngine.DEFAULTS = {
+  indexPath: '/search-index.json',
+  queryParam: 'q'
+};
 
 SearchEngine.prototype.fetchIndex = function(baseUrl) {
   var engine = this;
@@ -37,6 +37,10 @@ SearchEngine.prototype.fetchIndex = function(baseUrl) {
       } catch (err) {
         reject(new Error('failed to parse ' + indexUrl));
       }
+    });
+    req.addEventListener('error', function() {
+      reject(new Error('failed to make XMLHttpRequest; ' +
+        'see console for details'));
     });
     req.open('GET', indexUrl);
     req.send();

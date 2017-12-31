@@ -1,6 +1,6 @@
 ## jekyll_pages_api_search Plugin
 
-[![Build Status](https://travis-ci.org/18F/jekyll_pages_api_search.svg?branch=master)](https://travis-ci.org/18F/jekyll_pages_api_search)
+[![Continuous integration status for Linux and macOS](https://img.shields.io/travis/mbland/jekyll_pages_api_search/master.svg)](https://travis-ci.org/mbland/jekyll_pages_api_search)
 
 The [`jekyll_pages_api_search` Ruby
 gem](https://rubygems.org/gems/jekyll_pages_api_search) adds a
@@ -20,7 +20,7 @@ result receives the tab index, making mouse-based navigation unnecessary.
 </figcaption>
 </figure>
 
-## How it works
+### How it works
 
 On the server building the site, the plugin takes the corpus produced by the
 [`jekyll_pages_api` gem](https://github.com/18F/jekyll_pages_api/) and feeds
@@ -43,7 +43,7 @@ All of the client-side components are bundled together with
 `assets/js/search.js` into `assets/js/search-bundle.js` using
 [Browserify](http://browserify.org/).
 
-## Installation
+### Installation
 
 1. Install [Node.js](https://nodejs.org/) on your system. This plugin requires
    version 4.2 or greater or version 5 or greater. You may wish to first install a
@@ -99,7 +99,7 @@ All of the client-side components are bundled together with
    to take advantage of the gzipped versions of the search index and supporting
    JavaScript.
 
-## Usage
+### Usage
 
 To add the index to your pages, insert the following tags in your `_layouts`
 and `_includes` files as you see fit:
@@ -116,7 +116,7 @@ assets](http://jekyllrb.com/docs/assets/) to use the default interface style.
 Add `skip_index: true` to the front matter of any documents you would like to
 exclude from the index (e.g. indexes that contain summaries of other documents).
 
-## Configuration
+### Configuration
 
 In addition to the fields listed above in the [installation
 instructions](#installation), the following properties of the
@@ -130,7 +130,7 @@ instructions](#installation), the following properties of the
 - **endpoint**: The name of the endpoint generated for the search results
   page. Defaults to `search`.
 
-## Results UI and search engine options
+### Results UI and search engine options
 
 To customize elements of the search user interface and search engine, add the
 following objects to your search result page's layout _before_ the
@@ -228,44 +228,7 @@ instructions](#installation) above, replacing `js/my-search.js` with the path
 to your `renderJekyllPagesApiSearchResults` implementation script and
 `js/my-search-bundle.js` with the path to your generated bundle.
 
-### Examples from apps.gov
-
-[apps.gov's default
-layout](https://github.com/presidential-innovation-fellows/apps-gov/blob/master/_layouts/default.html)
-contains an example of setting the user interface options in concert with a [custom
-search results rendering
-script](https://github.com/presidential-innovation-fellows/apps-gov/blob/master/js/products.js):
-
-```html
-  </body>
-<script>
-var JEKYLL_PAGES_API_SEARCH_UI_OPTIONS = {
-  inputElementId: 'search-field',
-  searchResultsId: 'product-list',
-  emptyResultsMessagePrefix: 'No products found matching'
-};
-</script>
-{% jekyll_pages_api_search_load %}
-</html>
-```
-
-Note that if you have a _different_ input element on different pages, you can
-add something similar to the following to each corresponding layout (taken
-from [apps.gov's homepage
-layout](https://github.com/presidential-innovation-fellows/apps-gov/blob/master/_layouts/home.html)):
-
-```html
-  </body>
-<script>
-var JEKYLL_PAGES_API_SEARCH_UI_OPTIONS = {
-  inputElementId: 'search-field-big'
-};
-</script>
-{% jekyll_pages_api_search_load %}
-</html>
-```
-
-## Customizing tags and script loading
+### Customizing tags and script loading
 
 If you prefer to craft your own versions of these tags and styles, you can
 capture the output of these tags and the Sass `@import` statement, then create
@@ -283,14 +246,14 @@ Alternately, you can inspect the code of this gem (all paths relative to
 - `@import "jekyll_pages_api_search";`: includes
   `sass/jekyll_pages_api_search.scss`
 
-## Running standalone
+### Running standalone
 
 If you wish to generate a `search-index.json` file (and optionaly a
 `pages.json` file) when using a site generation tool other than Jekyll, you
 can run the `jekyll_pages_api_search` executable as a post-generation step.
 Run `jekyll_pages_api -h` for instructions.
 
-## Developing
+### Developing
 
 Install Node.js per the [installation instructions (step #1)](#installation).
 The `Rakefile` will prompt you to install Node.js and any packages
@@ -322,14 +285,14 @@ group :jekyll_plugins do
 end
 ```
 
-## Releasing
+### Releasing
 
 After following the steps from the [Developing section](#developing) to build
 and test the gem: 
 
 1. Ensure all changes for the release have already been merged all into the
    `master` branch.
-   
+
 1. Bump the version number by editing
    [`lib/jekyll_pages_api_search/version.rb`](lib/jekyll_pages_api_search/version.rb).
 
@@ -346,20 +309,17 @@ and test the gem:
    $ bundle exec rake release
    ```
 
-## Contributing
+### Open Source License
 
-If you'd like to contribute to this repository, please follow our
-[CONTRIBUTING guidelines](./CONTRIBUTING.md).
+This software is made available as [Open Source software][oss-def] under the
+[ISC License][].  For the text of the license, see the [LICENSE](LICENSE.md)
+file.
 
-## Public domain
+[oss-def]:     https://opensource.org/osd-annotated
+[isc license]: https://www.isc.org/downloads/software-support-policy/isc-license/
 
-This project is in the worldwide [public domain](LICENSE.md). As stated in
-[CONTRIBUTING](CONTRIBUTING.md):
+### Prior work
 
-> This project is in the public domain within the United States, and copyright
-> and related rights in the work worldwide are waived through the
-> [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
->
-> All contributions to this project will be released under the CC0 dedication.
-> By submitting a pull request, you are agreeing to comply with this waiver of
-> copyright interest.
+This is derived from the original [18F/jekyll_pages_api_search][old].
+
+[old]: https://github.com/18F/jekyll_pages_api_search

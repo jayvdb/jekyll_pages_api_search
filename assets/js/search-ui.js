@@ -1,33 +1,37 @@
 'use strict';
 
+var mergeOptions = require('./merge-options');
+
 module.exports = SearchUi;
 
 // eslint-disable-next-line
 // based on https://github.com/angular/angular.js/blob/54ddca537/docs/app/src/search.js#L198-L206
 function SearchUi(doc, options) {
-  var opts = options || {};
-
+  mergeOptions(SearchUi.DEFAULTS, options || {}, this);
   this.doc = doc;
-  this.inputElement = doc.getElementById(
-    opts.inputElementId || SearchUi.DEFAULT_SEARCH_INPUT_ID);
-  this.resultsElement = doc.getElementById(
-    opts.searchResultsId || SearchUi.DEFAULT_SEARCH_RESULTS_ID);
-  this.emptyResultsMessagePrefix = opts.emptyResultsMessagePrefix ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX;
-  this.emptyResultsElementType = opts.emptyResultsElementType ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE;
-  this.emptyResultsElementClass = opts.emptyResultsElementClass ||
-    SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS;
+  this.inputElement = doc.getElementById(this.inputElementId);
+  this.resultsElement = doc.getElementById(this.searchResultsId);
 }
 
-SearchUi.DEFAULT_SEARCH_INPUT_ID = 'search-input';
-SearchUi.DEFAULT_SEARCH_RESULTS_ID = 'search-results';
-SearchUi.DEFAULT_EMPTY_RESULTS_MESSAGE_PREFIX = 'No results found for';
-SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_TYPE = 'p';
-SearchUi.DEFAULT_EMPTY_RESULTS_ELEMENT_CLASS = 'search-empty';
+SearchUi.DEFAULTS = {
+  inputElementId: 'search-input',
+  searchResultsId: 'search-results',
+  emptyResultsMessagePrefix: 'No results found for',
+  emptyResultsElementType: 'p',
+  emptyResultsElementClass: 'search-empty',
 
-function isForwardSlash(keyCode) {
-  return keyCode === 191;
+  // Note that if any of these change, they must all change. It's the
+  // responsibility of the caller to ensure they remain correct and in-sync.
+  globalShortcutKey: '/',
+  globalShortcutKeyCode: 'Slash',
+  globalShortcutKeyNumericCode: 191
+};
+
+function isForwardSlash(searchUi, keyEvent) {
+  // The former condition is more conformant; the latter for backward
+  // compatibility (i.e. Safari).
+  return keyEvent.code === searchUi.globalShortcutKeyCode ||
+    keyEvent.keyCode === searchUi.globalShortcutKeyNumericCode;
 }
 
 function isInput(element) {
@@ -35,17 +39,18 @@ function isInput(element) {
 }
 
 SearchUi.prototype.enableGlobalShortcut = function() {
-  var doc = this.doc,
+  var searchUi = this,
+      doc = this.doc,
       inputElement = this.inputElement;
 
-  doc.body.onkeydown = function(event) {
-    if (isForwardSlash(event.keyCode) && !isInput(doc.activeElement)) {
-      event.stopPropagation();
-      event.preventDefault();
+  doc.body.addEventListener('keydown', function(e) {
+    if (isForwardSlash(searchUi, e) && !isInput(doc.activeElement)) {
+      e.stopPropagation();
+      e.preventDefault();
       inputElement.focus();
       inputElement.select();
     }
-  };
+  }, false);
 };
 
 SearchUi.prototype.renderResults = function(query, results, renderResults) {
@@ -55,20 +60,21 @@ SearchUi.prototype.renderResults = function(query, results, renderResults) {
   this.inputElement.value = query;
 
   if (results.length === 0) {
-    this.createEmptyResultsMessage(query);
+    createEmptyResultsMessage(this, query);
     this.inputElement.focus();
+    this.inputElement.select();
     return;
   }
   renderResults(query, results, this.doc, this.resultsElement);
 };
 
-SearchUi.prototype.createEmptyResultsMessage = function(query) {
-  var item = this.doc.createElement(this.emptyResultsElementType),
-      message = this.doc.createTextNode(
-        this.emptyResultsMessagePrefix + ' "' + query + '".'),
-      parentItem = this.resultsElement.parentElement;
+function createEmptyResultsMessage(searchUi, query) {
+  var item = searchUi.doc.createElement(searchUi.emptyResultsElementType),
+      message = searchUi.doc.createTextNode(
+        searchUi.emptyResultsMessagePrefix + ' "' + query + '".'),
+      parentItem = searchUi.resultsElement.parentElement;
 
-  item.style.className = this.emptyResultsElementClass;
+  item.className = searchUi.emptyResultsElementClass;
   item.appendChild(message);
-  parentItem.insertBefore(item, this.resultsElement);
-};
+  parentItem.insertBefore(item, searchUi.resultsElement);
+}

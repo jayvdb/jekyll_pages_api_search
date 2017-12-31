@@ -18,6 +18,7 @@ module JekyllPagesApiSearch
       @base = LAYOUTS_DIR
       @name = "#{layout_name}.html"
       @path = File.join(@base, @name)
+      @relative_path = @path.sub(@base, '')
       parse_content_and_data(File.join(@base, name))
       process(name)
     end

@@ -47,7 +47,7 @@
     "minify-lunr": "uglifyjs node_modules/lunr/lunr.js -c -m > lib/jekyll_pages_api_search/lunr.min.js",
     "make-bundle": "gulp search-bundle",
     "lint": "gulp lint",
-    "browser-test": "gulp prepare-tests && live-server --open=test/",
-    "test": "gulp prepare-tests && live-server --open=test/"
+    "prepare-tests": "gulp prepare-tests",
+    "test": "live-server --open=test/"
   }
 }

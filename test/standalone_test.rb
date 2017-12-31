@@ -1,4 +1,3 @@
-require_relative 'test_helper'
 require_relative 'site_builder'
 require_relative '../lib/jekyll_pages_api_search'
 
@@ -11,6 +10,14 @@ require 'tmpdir'
 module JekyllPagesApiSearch
   class DummySite
     def each_site_file
+    end
+
+    def in_source_dir(*paths)
+      paths
+    end
+
+    def in_theme_dir(*paths)
+      nil
     end
   end
 

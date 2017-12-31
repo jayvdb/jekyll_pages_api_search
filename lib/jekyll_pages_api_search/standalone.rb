@@ -3,6 +3,23 @@ require_relative './site'
 require 'fileutils'
 require 'jekyll_pages_api'
 
+module JekyllPagesApi
+  # Reopens the existing JekyllPagesApi::GeneratedSite to add methods needed by
+  # Jekyll::Page.initialize().
+  #
+  # These are invoked via Standalone.generate_index() when using
+  # JekyllPagesApi::Generator to create a new `pages.json` file.
+  class GeneratedSite
+    def in_source_dir(*paths)
+      paths
+    end
+
+    def in_theme_dir(*paths)
+      nil
+    end
+  end
+end
+
 module JekyllPagesApiSearch
   class Standalone
     def self.generate_index(basedir, config, pages_json, baseURL,

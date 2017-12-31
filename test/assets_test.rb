@@ -1,4 +1,3 @@
-require_relative 'test_helper'
 require_relative '../lib/jekyll_pages_api_search/assets'
 require_relative '../lib/jekyll_pages_api_search/sass'
 require_relative '../lib/jekyll_pages_api_search/tags'

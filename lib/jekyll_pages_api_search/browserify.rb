@@ -10,7 +10,11 @@ module JekyllPagesApiSearch
     DIRNAME = File.dirname(__FILE__).freeze
     BROWSERIFY_SCRIPT = File.join(DIRNAME, 'browserify.js').freeze
 
-    def self.create_bundle(site)
+    def self.create_bundles(site)
+      create_custom_renderer_bundle(site)
+    end
+
+    def self.create_custom_renderer_bundle(site)
       browserify_config = Config.get(site, 'browserify')
       return if browserify_config.nil?
       source = File.join(site.source, browserify_config['source'])

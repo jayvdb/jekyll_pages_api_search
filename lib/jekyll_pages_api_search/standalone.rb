@@ -1,3 +1,4 @@
+require_relative './bundler'
 require_relative './compressor'
 require_relative './site'
 require 'fileutils'
@@ -45,6 +46,7 @@ module JekyllPagesApiSearch
         File.open(outfile, 'w') {|f| f << content}
       end
       Compressor::gzip_in_memory_content output
+      Bundler::create_search_bundles(site)
       Assets::copy_to_basedir site.source
     end
   end

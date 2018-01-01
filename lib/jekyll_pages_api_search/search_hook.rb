@@ -1,5 +1,7 @@
+require_relative './bundler'
 require_relative './compressor'
 require_relative './config'
+require_relative './search_hook'
 require_relative './search_page'
 require_relative './search_page_layouts'
 
@@ -32,11 +34,13 @@ module Jekyll
     end
 
     def pages_api_search_after_write
-      index = pages.find {|p| p.name == 'search-index.json'}
+      index = pages.find do |p|
+        p.name == JekyllPagesApiSearch::SearchIndexBuilder::INDEX_FILE
+      end
       raise 'Search index not found' if index.nil?
       JekyllPagesApiSearch::Compressor.gzip_in_memory_content(
         "#{index.destination self.dest}" => index.output)
-      JekyllPagesApiSearch::Browserify.create_bundle(self)
+      JekyllPagesApiSearch::Bundler.create_search_bundles(self)
     end
   end
 end

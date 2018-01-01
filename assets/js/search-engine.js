@@ -14,16 +14,12 @@ function SearchEngine(options) {
 }
 
 SearchEngine.DEFAULTS = {
-  indexPath: '/search-index.json',
   queryParam: 'q'
 };
 
-SearchEngine.prototype.fetchIndex = function(baseUrl) {
-  var engine = this;
-
+SearchEngine.prototype.fetchIndex = function(indexUrl) {
   return new Promise(function(resolve, reject) {
-    var req = new XMLHttpRequest(),
-        indexUrl = baseUrl + engine.indexPath;
+    var req = new XMLHttpRequest();
 
     req.addEventListener('load', function() {
       var rawJson;

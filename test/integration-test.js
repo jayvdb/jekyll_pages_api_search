@@ -70,7 +70,7 @@ describe('Integration test', function() {
 
         // The global '/' shortcut should still work, though. The query text
         // won't get added to the search box, however.
-        frameDoc.body.dispatchEvent(shortcutEvent);
+        frameDoc.body.dispatchEvent(shortcutEvent).should.be.true;
         expect(frameDoc.activeElement).to.eql(searchInput);
         getSelection().should.eql('');
       });
@@ -91,7 +91,7 @@ describe('Integration test', function() {
 
         // Now ensure the keypress puts the focus on the search box and
         // selects the pre-filled query text.
-        frameDoc.body.dispatchEvent(shortcutEvent);
+        frameDoc.body.dispatchEvent(shortcutEvent).should.be.true;
         expect(frameDoc.activeElement).to.eql(searchInput);
         getSelection().should.eql('document');
       });

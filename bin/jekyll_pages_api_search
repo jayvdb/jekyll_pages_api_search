@@ -1,13 +1,11 @@
 #! /usr/bin/env ruby
-# Author: Mike Bland <michael.bland@gsa.gov>
-# Date:   2015-06-21
 
 require_relative '../lib/jekyll_pages_api_search'
 require 'fileutils'
 require 'jekyll_pages_api'
 require 'zlib'
 
-ASSETS_DIR = ::JekyllPagesApiSearch::JavascriptCopier::ASSETS_DIR
+ASSETS_DIR = ::JekyllPagesApiSearch::Assets::JAVASCRIPT_DIR
 
 USAGE=<<END_USAGE
 #{$0}: generate a lunr.js index from Jekyll Pages API output

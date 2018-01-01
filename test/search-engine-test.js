@@ -15,14 +15,11 @@ describe('SearchEngine', function() {
   });
 
   it('should initialize with the default values', function() {
-    searchEngine.indexPath.should.eql(SearchEngine.DEFAULTS.indexPath);
     searchEngine.queryParam.should.eql(SearchEngine.DEFAULTS.queryParam);
   });
 
   it('should initialize with optional values', function() {
-    searchEngine = new SearchEngine(
-      { indexPath: '/index.json', queryParam: 'query' });
-    searchEngine.indexPath.should.eql('/index.json');
+    searchEngine = new SearchEngine({ queryParam: 'query' });
     searchEngine.queryParam.should.eql('query');
   });
 
@@ -32,7 +29,7 @@ describe('SearchEngine', function() {
   });
 
   it('should fetch the index from the test site', function() {
-    return searchEngine.fetchIndex('data').should.be.fulfilled
+    return searchEngine.fetchIndex('data/search-index.json').should.be.fulfilled
       .then(function(index) {
         index.urlToDoc.should.eql({
           '/foo': { url: '/foo', title: 'Foo' },
@@ -43,7 +40,8 @@ describe('SearchEngine', function() {
   });
 
   it('should execute a successful search', function() {
-    return searchEngine.executeSearch('data', '/?q=second+example')
+    return searchEngine.executeSearch('data/search-index.json',
+      '/?q=second+example')
       .should.be.fulfilled.then(function(results) {
         results.query.should.eql('second example');
 

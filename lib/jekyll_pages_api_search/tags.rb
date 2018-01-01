@@ -32,8 +32,8 @@ module JekyllPagesApiSearch
     end
 
     def self.generate_script(baseurl, site: nil)
-      "<script>JEKYLL_PAGES_API_SEARCH_BASEURL = '#{baseurl}';</script>\n" +
         site_bundle_load_tag(site, baseurl) +
+        "<script src=\"#{baseurl}/assets/js/search-constants.js\"></script>\n" +
         "<script async src=\"#{baseurl}/assets/js/search-bundle.js\">" +
         "</script>"
     end

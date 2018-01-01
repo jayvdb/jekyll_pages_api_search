@@ -6,13 +6,16 @@ require 'zlib'
 PACKAGE_INFO = JSON.parse(
   File.read(File.join(File.dirname(__FILE__), 'package.json')))
 
-Rake::TestTask.new do |t|
+Rake::TestTask.new('test:ruby') do |t|
   t.libs << 'test'
   t.test_files = FileList['test/*test.rb']
 end
+task 'test:ruby' => :build_js
 
 desc "Run tests"
+task :test => [ 'test:ruby', 'test:js' ]
 task :default => :test
+
 
 def program_exists?(program)
   `which #{program}`
@@ -83,6 +86,12 @@ task :build_js => [ :check_for_node ].concat(ARTIFACTS) do
       abort "#{artifact} missing or empty"
     end
   end
+end
+
+desc 'Run JavaScript tests'
+task 'test:js' => [:build_js] do
+  abort "failed to prepare JS tests" unless system 'npm', 'run', 'prepare-tests'
+  abort "JavaScript tests failed" unless system './scripts/test'
 end
 
 task :clean do

@@ -7,14 +7,14 @@ Gem::Specification.new do |s|
   s.name          = 'jekyll_pages_api_search'
   s.version       = JekyllPagesApiSearch::VERSION
   s.authors       = ['Mike Bland']
-  s.email         = ['michael.bland@gsa.gov']
+  s.email         = ['mbland@acm.org']
   s.summary       = 'Adds lunr.js search based on the jekyll_pages_api gem'
   s.description   = (
     'Contains a Jekyll plugin and associated files that facilitate adding ' +
     'client-side search features to a site using the jekyll_pages_api gem.'
   )
-  s.homepage      = 'https://github.com/18F/jekyll_pages_api_search'
-  s.license       = 'CC0'
+  s.homepage      = 'https://github.com/mbland/jekyll_pages_api_search'
+  s.license       = 'ISC'
 
   s.files         = `git ls-files -z *.md bin lib assets`.split("\x0") + [
     'assets/js/search-bundle.js',

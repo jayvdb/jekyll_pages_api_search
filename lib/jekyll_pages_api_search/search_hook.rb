@@ -1,3 +1,4 @@
+require_relative './bundler'
 require_relative './compressor'
 require_relative './config'
 require_relative './search_hook'
@@ -39,6 +40,7 @@ module Jekyll
       raise 'Search index not found' if index.nil?
       JekyllPagesApiSearch::Compressor.gzip_in_memory_content(
         "#{index.destination self.dest}" => index.output)
+      JekyllPagesApiSearch::Bundler.create_search_bundles(self)
     end
   end
 end

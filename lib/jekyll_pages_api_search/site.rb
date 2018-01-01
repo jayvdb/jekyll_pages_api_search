@@ -6,12 +6,14 @@ module JekyllPagesApiSearch
   # standalone.rb module in this directory, since the full Jekyll::Site would be
   # too complex for this purpose.
   class Site
-    attr_reader :source, :config
+    attr_reader :source, :dest, :config, :baseurl
     attr_accessor :pages
 
     def initialize(basedir, config)
       @source = basedir
+      @dest = basedir
       @config = SafeYAML.load_file(config, :safe => true)
+      @baseurl = @config['baseurl'] || '/'
       @pages = []
     end
 

@@ -37,7 +37,7 @@ module.exports = function() {
   }
 
   return searchEngine.executeSearch(
-    window.JEKYLL_PAGES_API_SEARCH_BASEURL, window.location.href)
+    window.JEKYLL_PAGES_API_SEARCH_INDEX_URL, window.location.href)
     .then(function(searchResults) {
       searchUi.renderResults(searchResults.query, searchResults.results,
         window.renderJekyllPagesApiSearchResults || writeResultsToList);

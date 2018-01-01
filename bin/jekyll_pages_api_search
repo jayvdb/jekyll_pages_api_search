@@ -1,6 +1,4 @@
 #! /usr/bin/env ruby
-# Author: Mike Bland <michael.bland@gsa.gov>
-# Date:   2015-06-21
 
 require_relative '../lib/jekyll_pages_api_search'
 require 'fileutils'

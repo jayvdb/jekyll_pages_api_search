@@ -8,6 +8,8 @@ require 'jekyll'
 
 module JekyllPagesApiSearch
   class Generator < ::Jekyll::Generator
+    safe true
+
     def generate(site)
       return if Config.skip_index?(site)
       JekyllPagesApiSearch::SearchPageLayouts.register(site)
